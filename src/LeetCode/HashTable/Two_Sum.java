@@ -3,6 +3,13 @@ package LeetCode.HashTable;
 import java.util.Arrays;
 import java.util.Hashtable;
 
+/*
+    ----------------------------------------------------------------
+    | Problem: Two Sum
+    | Link: https://leetcode.com/problems/two-sum/
+    | Status: Accepted Solution
+    ----------------------------------------------------------------
+*/
 
 public class Two_Sum {
 
@@ -13,7 +20,6 @@ public class Two_Sum {
         System.out.println(Arrays.toString(result));
     }
 
-    // Solution: Accepted
     public static int[] twoSum(int[] nums, int target) {
         Hashtable<Integer, Integer> hTable = new Hashtable<>();
         int[] result = new int[2];

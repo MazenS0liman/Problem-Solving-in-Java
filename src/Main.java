@@ -1,65 +1,91 @@
-
+//import java.io.BufferedReader;
+//import java.io.IOException;
+//import java.io.InputStreamReader;
+//import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.*;
 
 public class Main {
-    public static void main(String[]args) {
-//        int[] arr = {-17, 5, 3, -10, 6, 1, 4, -3, 8, 1, -13, 4};
-        int[] arr = {-17, -4, 3};
-        int result = getLargestSubset(arr, 0, arr.length - 1);
-        System.out.println(result);
-    }
+//    public static void main(String[]args) throws IOException {
+//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//        int n = Integer.parseInt(br.readLine());
+//        PrintWriter pw = new PrintWriter(System.out);
+//        String[] words = new String[n+1];
+//
+//        for (int i = 0; i < n; i++) {
+//            String[] line = br.readLine().split(" ");
+//            words[Integer.parseInt(line[1])] = line[0];
+//        }
+//
+//        int t = Integer.parseInt(br.readLine());
+//        for(int i = 0; i < t; i++) {
+//            String str = br.readLine();
+//            Stack<String> stack = new Stack<>();
+//            for (String s : words) {
+//                if (s == null) continue;
+//                if (s.startsWith(str)) {
+//                    stack.add(s);
+//                }
+//                if (stack.size() == 2) {
+//                    break;
+//                }
+//            }
+//
+//            if (stack.isEmpty()) {
+//                pw.println(-1);
+//            }
+//            else {
+//                pw.println(stack.pop());
+//            }
+//        }
+//        pw.flush();
+//    }
 
-    // Get largest subset
-    public static int getLargestSubset(int[] array, int i, int j) {
-        if (i == j) {
-            return array[i];
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter pw = new PrintWriter(System.out);
+        String s1 = br.readLine();
+        int k = Integer.parseInt(br.readLine());
+        String s2 = br.readLine();
+        HashMap<String, Integer> hMap = new HashMap<String, Integer>();
+
+        if (s1.length() % k != 0 || s2.length() % k != 0 || s1.length() != s2.length()) {
+            pw.println(0);
         }
         else {
-            int mid = i + (j - i) / 2;
-            int largestSubsetLeft = getLargestSubset(array, i, mid);
-            int largestSubsetRight = getLargestSubset(array, mid + 1, j);
-            int maximumCrossing = getMaximumCrossing(array, i, mid, j);
-
-            if (maximumCrossing > largestSubsetRight && maximumCrossing > largestSubsetLeft) {
-                return maximumCrossing;
+            int mod = s1.length() % k;
+            for (int i = 0; i < mod; i += k) {
+                String tmp = s1.substring(i, i + k);
+                if (hMap.containsKey(tmp)) {
+                    hMap.put(tmp, hMap.get(tmp) + 1);
+                }
+                else {
+                    hMap.put(tmp, 1);
+                }
             }
-            else if (largestSubsetRight > largestSubsetLeft) {
-                return largestSubsetRight;
+
+            boolean flag = true;
+            for (int i = 0; i < mod; i += k) {
+                String tmp = s2.substring(i, i + k);
+                if (hMap.containsKey(tmp) && hMap.get(tmp) > 0) {
+                    hMap.put(tmp, hMap.get(tmp) - 1);
+                }
+                else {
+                    flag = false;
+                }
+            }
+
+            if (flag) {
+                pw.println(1);
             }
             else {
-                return largestSubsetLeft;
-            }
-        }
-    }
-
-    public static int getMaximumCrossing(int[] array, int i, int mid, int j) {
-        int largestLeftSum = 0;
-        int accumlativeLeftSum = 0;
-        for (int k = mid; k >= i && k >= 0; k--) {
-            accumlativeLeftSum += array[k];
-            if (accumlativeLeftSum >= largestLeftSum) {
-                largestLeftSum = accumlativeLeftSum;
+                pw.println(0);
             }
         }
 
-        int largestRightSum = 0;
-        int accumlativeRightSum = 0;
-        for (int k = mid + 1; k <= j && k < array.length; k++) {
-            accumlativeRightSum += array[k];
-            if (accumlativeRightSum >= largestRightSum) {
-                largestRightSum = accumlativeRightSum;
-            }
-        }
-
-        int result = 0;
-        int crossSum = largestRightSum + largestLeftSum;
-        if (crossSum > largestRightSum && crossSum > largestLeftSum) {
-            return crossSum;
-        }
-        else if (largestRightSum > largestLeftSum) {
-            return largestRightSum;
-        }
-        else {
-            return largestLeftSum;
-        }
+        pw.flush();
     }
 }
